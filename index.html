@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBD Salma Jamet + Minigame!</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a0b2e 0%, #31145a 100%);
+            margin: 0;
+            padding: 0;
+            display: block;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #fff;
+            text-align: center;
+        }
+        
+        /* Overlay Interaksi Awal */
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(26, 11, 46, 0.95);
+            z-index: 9999;
+            display: table;
+        }
+        .overlay-cell {
+            display: table-cell;
+            vertical-align: middle;
+        }
+        .start-btn {
+            background: linear-gradient(45deg, #ff4081, #ec407a);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(236, 64, 122, 0.4);
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .start-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px 20px 40px 20px;
+        }
+
+        /* Area Game */
+        .game-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed #ff4081;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .score-board {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #b2ff59;
+            margin-bottom: 10px;
+        }
+        .game-canvas {
+            width: 100%;
+            height: 180px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .falling-item {
+            position: absolute;
+            font-size: 2rem;
+            user-select: none;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        /* Animasi Kue Jatuh */
+        .cake-container {
+            position: relative;
+            height: 250px;
+            margin: 20px auto;
+            width: 250px;
+            display: none; 
+        }
+
+        .cake-layer {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px 10px 4px 4px;
+            box-shadow: inset 0 -10px 0 rgba(0,0,0,0.1);
+        }
+
+        .layer-bottom {
+            width: 200px;
+            height: 70px;
+            background: #6d4c41;
+            bottom: 0;
+            border-top: 15px solid #ff80ab;
+            animation: dropLayer 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation-delay: 0.2s;
+        }
+
+        .layer-middle {
+            width: 150px;
+            height: 60px;
+            background: #f8bbd0;
+            bottom: 65px;
+            border-top: 12px solid #fff9c4;
+            animation: dropLayer 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation-delay: 0.9s;
+        }
+
+        .layer-top {
+            width: 100px;
+            height: 50px;
+            background: #fff9c4;
+            bottom: 120px;
+            border-top: 10px solid #ff4081;
+            animation: dropLayer 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation-delay: 1.6s;
+        }
+
+        @keyframes dropLayer {
+            0% { transform: translate(-50%, -500px); opacity: 0; }
+            100% { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        /* Lilin */
+        .candle {
+            position: absolute;
+            width: 12px;
+            height: 45px;
+            background: linear-gradient(to right, #00e5ff, #b2ff59);
+            bottom: 170px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px 3px 0 0;
+            opacity: 0;
+            animation: fadeInCandle 0.5s ease forwards;
+            animation-delay: 2.4s;
+        }
+
+        @keyframes fadeInCandle {
+            0% { opacity: 0; transform: translate(-50%, -20px); }
+            100% { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        /* Api Lilin */
+        .flame {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            width: 14px;
+            height: 22px;
+            background: #ffeb3b;
+            border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+            box-shadow: 0 0 10px #ff9800, 0 0 20px #ff5722;
+            animation: ignite 0.5s ease forwards, flicker 0.1s ease-in-out infinite alternate;
+            animation-delay: 3.2s;
+        }
+
+        @keyframes ignite {
+            0% { transform: translateX(-50%) scale(0); }
+            100% { transform: translateX(-50%) scale(1); }
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1) rotate(-1deg); opacity: 0.9; }
+            100% { transform: translateX(-50%) scale(1.05) rotate(1deg); opacity: 1; }
+        }
+
+        /* Kartu Ucapan */
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            display: none; 
+        }
+
+        .show-card {
+            display: block;
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 3.7s;
+        }
+
+        @keyframes fadeInUp {
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #ff4081;
+            font-size: 2.2rem;
+            margin-top: 0;
+            text-shadow: 0 0 10px rgba(255,64,129,0.3);
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .wish {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #b2ff59;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .sparkles {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="birthdayAudio" src="https://assets.mixkit.co/active_storage/sfx/123/123-200.wav" preload="auto"></audio>
+
+    <div id="overlay">
+        <div class="overlay-cell">
+            <h2 style="color: #ff4081; font-size: 1.8rem; margin-bottom: 20px;">Woy Salma Jamet, ada tantangan nih! 😎</h2>
+            <p style="padding: 0 20px; margin-bottom: 25px;">Pecahin 10 kado/balon jatuh buat buka kejutannya!</p>
+            <button class="start-btn" onclick="startSurprise()">Gas Main! 🎮</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="game-box" id="gameBox">
+            <div class="score-board" id="scoreBoard">Kado Dipecahin: 0 / 10</div>
+            <div class="game-canvas" id="gameCanvas">
+                </div>
+        </div>
+
+        <div class="cake-container" id="cakeContainer">
+            <div class="candle">
+                <div class="flame"></div>
+            </div>
+            <div class="cake-layer layer-top"></div>
+            <div class="cake-layer layer-middle"></div>
+            <div class="cake-layer layer-bottom"></div>
+        </div>
+
+        <div class="card" id="wishCard">
+            <div class="sparkles">✨ 🎉 🎈 ✨</div>
+            <h1>HBD Salma Jamet!</h1>
+            <p>Ciee sukses nyelesaiin game! Selamat ulang tahun ya wak. Semoga makin kece, sehat terus, dan kurang-kurangin jametnya wkwk (bercanda damai ✌️).</p>
+            <p class="wish">"Moga rezeki lu lancar jaya, apa yang diharepin cepet kecapai... dan yang pasti ditunggu banget nih traktirannya! Gas ngab! 🥳"</p>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        const targetScore = 10;
+        let gameInterval;
+        const canvas = document.getElementById('gameCanvas');
+        const items = ['🎁', '🎈', '🎂', '🎉'];
+        const audio = document.getElementById('birthdayAudio');
+
+        function startSurprise() {
+            document.getElementById('overlay').style.display = 'none';
+            // Pancing audio load saat user interaksi pertama kali biar aman dari policy browser
+            audio.play().then(() => {
+                audio.pause();
+                audio.currentTime = 0;
+            }).catch(e => console.log("Audio load error:", e));
+            
+            startGame();
+        }
+
+        function startGame() {
+            gameInterval = setInterval(createFallingItem, 600);
+        }
+
+        function createFallingItem() {
+            if (score >= targetScore) {
+                clearInterval(gameInterval);
+                return;
+            }
+
+            const item = document.createElement('div');
+            item.className = 'falling-item';
+            item.innerText = items[Math.floor(Math.random() * items.length)];
+            
+            const randomX = Math.random() * (canvas.clientWidth - 40);
+            item.style.left = randomX + 'px';
+            item.style.top = '-40px';
+            
+            canvas.appendChild(item);
+
+            let topPos = -40;
+            const speed = 2 + Math.random() * 3;
+
+            function fall() {
+                if (score >= targetScore) {
+                    item.remove();
+                    return;
+                }
+                
+                topPos += speed;
+                item.style.top = topPos + 'px';
+
+                if (topPos < canvas.clientHeight) {
+                    requestAnimationFrame(fall);
+                } else {
+                    item.remove();
+                }
+            }
+
+            item.addEventListener('click', () => {
+                score++;
+                document.getElementById('scoreBoard').innerText = `Kado Dipecahin: ${score} / ${targetScore}`;
+                
+                item.style.transform = 'scale(1.5)';
+                setTimeout(() => item.remove(), 100);
+
+                if (score >= targetScore) {
+                    endGameAndShowCake();
+                }
+            });
+
+            requestAnimationFrame(fall);
+        }
+
+        function endGameAndShowCake() {
+            clearInterval(gameInterval);
+            document.getElementById('gameBox').style.display = 'none';
+            
+            const cake = document.getElementById('cakeContainer');
+            cake.style.display = 'block';
+
+            const card = document.getElementById('wishCard');
+            card.classList.add('show-card');
+
+            // LAGU BERBUNYI NYARING TEPAT SAAT LILIN MENYALA (3.2 Detik)
+            setTimeout(() => {
+                // Diubah menggunakan file ringtone audio asli internet agar suara kencang
+                audio.play().catch(error => {
+                    console.log("Autoplay music diblokir browser, coba berinteraksi dulu.");
+                });
+            }, 3200);
+        }
+    </script>
+</body>
+</html>
