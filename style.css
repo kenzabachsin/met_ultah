@@ -1,0 +1,212 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+    background: #120720;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+}
+
+/* Canvas untuk sistem partikel membentuk Love */
+#particleCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* --- LAYAR LOCK / COUNTDOWN --- */
+#lockScreen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #120720;
+    z-index: 100;
+}
+.warning-box {
+    border: 3px solid #ff4081;
+    background: rgba(255, 64, 129, 0.1);
+    padding: 30px;
+    box-shadow: 8px 8px 0px rgba(255, 64, 129, 0.4);
+    max-width: 420px;
+    width: 90%;
+    z-index: 101;
+}
+.blink-text {
+    color: #ff4081;
+    font-size: 1.5rem;
+    font-weight: bold;
+    animation: blinker 1s linear infinite;
+    margin-bottom: 10px;
+}
+@keyframes blinker { 50% { opacity: 0; } }
+
+.countdown {
+    font-size: 2rem;
+    color: #b2ff59;
+    text-shadow: 2px 2px 0px #000;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.cheat-btn {
+    background: transparent;
+    color: #555;
+    border: 1px dashed #555;
+    padding: 5px 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+.cheat-btn:hover { color: #fff; border-color: #fff; }
+
+/* --- CONTAINER UTAMA SURPRISE --- */
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 10;
+}
+#mainSurprise {
+    display: none;
+    padding-top: 40px;
+}
+
+/* Animasi Kue Flat 2D */
+.cake-container {
+    position: relative;
+    height: 230px;
+    margin: 0 auto 25px auto;
+    width: 250px;
+    filter: drop-shadow(8px 8px 0px rgba(0,0,0,0.4));
+}
+.cake-layer {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid #2c1a4d;
+}
+.layer-bottom {
+    width: 200px; height: 70px; background: #6d4c41; bottom: 0;
+    border-top: 15px solid #ff80ab;
+    box-shadow: inset -15px 0 0 rgba(0,0,0,0.2);
+    animation: dropLayer 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    opacity: 0;
+}
+.layer-middle {
+    width: 150px; height: 60px; background: #f8bbd0; bottom: 65px;
+    border-top: 12px solid #fff9c4;
+    box-shadow: inset -15px 0 0 rgba(0,0,0,0.1);
+    animation: dropLayer 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.3s;
+    opacity: 0;
+}
+.layer-top {
+    width: 100px; height: 50px; background: #fff9c4; bottom: 120px;
+    border-top: 10px solid #ff4081;
+    box-shadow: inset -10px 0 0 rgba(0,0,0,0.1);
+    animation: dropLayer 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.6s;
+    opacity: 0;
+}
+@keyframes dropLayer {
+    0% { transform: translate(-50%, -100px); opacity: 0; }
+    100% { transform: translate(-50%, 0); opacity: 1; }
+}
+
+/* Lilin & Api */
+.candle {
+    position: absolute; width: 14px; height: 45px;
+    background: #00e5ff; border: 3px solid #2c1a4d;
+    bottom: 170px; left: 50%; transform: translateX(-50%);
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards 1.2s;
+}
+.flame {
+    position: absolute; top: -22px; left: 50%;
+    transform: translateX(-50%) scale(0);
+    width: 18px; height: 26px; background: #ffeb3b;
+    border: 2px solid #ff9800;
+    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+    animation: ignite 0.5s ease forwards 1.8s, flicker 0.2s steps(2, end) infinite alternate 2.3s;
+}
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes ignite { to { transform: translateX(-50%) scale(1); } }
+@keyframes flicker {
+    0% { transform: translateX(-50%) scale(1) skewX(2deg); }
+    100% { transform: translateX(-50%) scale(1.05) skewX(-2deg); }
+}
+
+/* --- KOTAK DIALOG --- */
+.dialog-box {
+    background: #201235;
+    border: 4px solid #b2ff59;
+    padding: 25px;
+    box-shadow: 10px 10px 0px rgba(178, 255, 89, 0.3);
+    text-align: center;
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+}
+.show-dialog {
+    animation: popUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 2.5s;
+}
+@keyframes popUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dialog-name {
+    position: absolute;
+    top: -20px; left: -4px;
+    background: #b2ff59;
+    color: #000;
+    padding: 5px 15px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border: 4px solid #120720;
+}
+
+.dialog-text p {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #fff;
+    font-weight: 500;
+}
+
+.dialog-text h1 {
+    color: #ff4081;
+    font-size: 2.6rem;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 900;
+    text-shadow: 3px 3px 0px #120720;
+    letter-spacing: 1px;
+}
+
+.highlight-quote {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.highlight-quote p {
+    color: #b2ff59 !important;
+    font-style: italic;
+    font-weight: bold;
+    margin: 0;
+    font-size: 1.2rem !important;
+}

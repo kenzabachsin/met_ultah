@@ -3,327 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HBD Salma Jamet!</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a0b2e 0%, #31145a 100%);
-            margin: 0;
-            padding: 0;
-            display: block;
-            min-height: 100vh;
-            overflow-x: hidden;
-            color: #fff;
-            text-align: center;
-        }
-        
-        /* Overlay Awal */
-        #overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(26, 11, 46, 0.95);
-            z-index: 9999;
-            display: table;
-        }
-        .overlay-cell {
-            display: table-cell;
-            vertical-align: middle;
-        }
-        .btn {
-            background: linear-gradient(45deg, #ff4081, #ec407a);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(236, 64, 122, 0.4);
-            font-weight: bold;
-            transition: transform 0.2s;
-            margin-top: 20px;
-        }
-        .btn:hover {
-            transform: scale(1.05);
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px 20px 40px 20px;
-        }
-
-        /* --- SECTION KUE & UCAPAN --- */
-        #surpriseSection {
-            display: none; /* Disembunyikan sampai tombol awal diklik */
-        }
-
-        /* Animasi Kue */
-        .cake-container {
-            position: relative;
-            height: 250px;
-            margin: 40px auto 20px auto;
-            width: 250px;
-        }
-        .cake-layer {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 10px 10px 4px 4px;
-            box-shadow: inset 0 -10px 0 rgba(0,0,0,0.1);
-        }
-        .layer-bottom {
-            width: 200px; height: 70px; background: #6d4c41; bottom: 0;
-            border-top: 15px solid #ff80ab;
-            animation: dropLayer 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            animation-delay: 0.2s;
-        }
-        .layer-middle {
-            width: 150px; height: 60px; background: #f8bbd0; bottom: 65px;
-            border-top: 12px solid #fff9c4;
-            animation: dropLayer 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            animation-delay: 0.9s;
-        }
-        .layer-top {
-            width: 100px; height: 50px; background: #fff9c4; bottom: 120px;
-            border-top: 10px solid #ff4081;
-            animation: dropLayer 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            animation-delay: 1.6s;
-        }
-        @keyframes dropLayer {
-            0% { transform: translate(-50%, -500px); opacity: 0; }
-            100% { transform: translate(-50%, 0); opacity: 1; }
-        }
-
-        /* Lilin & Api */
-        .candle {
-            position: absolute; width: 12px; height: 45px;
-            background: linear-gradient(to right, #00e5ff, #b2ff59);
-            bottom: 170px; left: 50%; transform: translateX(-50%);
-            border-radius: 3px 3px 0 0; opacity: 0;
-            animation: fadeInCandle 0.5s ease forwards;
-            animation-delay: 2.4s;
-        }
-        @keyframes fadeInCandle {
-            0% { opacity: 0; transform: translate(-50%, -20px); }
-            100% { opacity: 1; transform: translate(-50%, 0); }
-        }
-        .flame {
-            position: absolute; top: -18px; left: 50%;
-            transform: translateX(-50%) scale(0);
-            width: 14px; height: 22px; background: #ffeb3b;
-            border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
-            box-shadow: 0 0 10px #ff9800, 0 0 20px #ff5722;
-            animation: ignite 0.5s ease forwards, flicker 0.1s ease-in-out infinite alternate;
-            animation-delay: 3.2s;
-        }
-        @keyframes ignite {
-            0% { transform: translateX(-50%) scale(0); }
-            100% { transform: translateX(-50%) scale(1); }
-        }
-        @keyframes flicker {
-            0% { transform: translateX(-50%) scale(1) rotate(-1deg); opacity: 0.9; }
-            100% { transform: translateX(-50%) scale(1.05) rotate(1deg); opacity: 1; }
-        }
-
-        /* Kartu Ucapan */
-        .card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            opacity: 0; transform: translateY(20px);
-            display: none; /* Muncul via JS */
-        }
-        .show-card {
-            display: block;
-            animation: fadeInUp 1s ease forwards;
-        }
-        @keyframes fadeInUp {
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        h1 { color: #ff4081; font-size: 2.2rem; margin-top: 0; text-shadow: 0 0 10px rgba(255,64,129,0.3); }
-        p { font-size: 1.1rem; line-height: 1.6; color: #e0e0e0; }
-        .wish { font-size: 1.2rem; font-style: italic; color: #b2ff59; font-weight: bold; margin-top: 20px; }
-
-        /* --- SECTION MINIGAME --- */
-        #gameSection { display: none; }
-        .game-box {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px dashed #ff4081; border-radius: 15px;
-            padding: 15px; margin-top: 20px; position: relative;
-        }
-        .score-board { font-size: 1.1rem; font-weight: bold; color: #b2ff59; margin-bottom: 10px; }
-        .game-canvas {
-            width: 100%; height: 250px; background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px; position: relative; overflow: hidden; cursor: crosshair;
-        }
-        .falling-item {
-            position: absolute; font-size: 2.5rem; user-select: none;
-            cursor: pointer; transition: transform 0.1s;
-        }
-
-        /* --- SECTION FINAL (MENANG) --- */
-        #finalSection { display: none; margin-top: 50px; }
-        .success-icon { font-size: 5rem; margin-bottom: 10px; animation: bounce 1s infinite; }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-    </style>
+    <title>Sistem Rahasia: Salma_Jamet.exe</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Canvas untuk Efek Animasi Love Elektrik -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Audio Efek/Musik -->
     <audio id="bgMusic" src="https://assets.mixkit.co/active_storage/sfx/123/123-200.wav" loop preload="auto"></audio>
 
-    <div id="overlay">
-        <div class="overlay-cell">
-            <h2 style="color: #ff4081; font-size: 1.8rem; margin-bottom: 20px;">Halo Salma Jamet... 👀✨</h2>
-            <p>Ada sesuatu yang spesial buat lu nih.</p>
-            <button class="btn" onclick="startSurprise()">Buka Kejutannya 🎁</button>
+    <!-- 1. TAMPILAN LOCK SCREEN & COUNTDOWN -->
+    <div id="lockScreen">
+        <div class="warning-box">
+            <div class="blink-text">⚠️ AKSES DITOLAK ⚠️</div>
+            <p style="font-size: 1rem; line-height: 1.4;">Target "Salma_Jamet" belum mencapai siklus penambahan usia resmi.</p>
+            <p>Waktu tersisa menuju 27 Juni:</p>
+            <div class="countdown" id="countdownTimer">Loading...</div>
+            <button class="cheat-btn" onclick="unlockSurprise()">[Dev Mode: Maksa Buka]</button>
         </div>
     </div>
 
+    <!-- 2. HALAMAN UTAMA SURPRISE -->
     <div class="container">
-        
-        <div id="surpriseSection">
-            <div class="cake-container">
+        <div id="mainSurprise">
+            
+            <!-- Elemen Kue 2D -->
+            <div class="cake-container" id="cakeBox">
                 <div class="candle"><div class="flame"></div></div>
                 <div class="cake-layer layer-top"></div>
                 <div class="cake-layer layer-middle"></div>
                 <div class="cake-layer layer-bottom"></div>
             </div>
 
-            <div class="card" id="wishCard">
-                <div style="font-size: 1.5rem; margin-bottom: 10px;">✨ 🎉 🎈 ✨</div>
-                <h1>HBD Salma Jamet!</h1>
-                <p>Ciee yang nambah umur! Selamat ulang tahun ya wak. Semoga makin kece, sehat terus, rezeki lancar, dan kurang-kurangin jametnya wkwk (bercanda damai ✌️).</p>
-                <p class="wish">"Eits, tapi tunggu dulu... Traktiran nggak akan cair segampang itu! Lu harus ngelewatin ujian dari gue dulu 😎"</p>
-                
-                <button class="btn" onclick="openGame()" style="margin-top: 25px;">Gass Main Game! 🎮</button>
+            <!-- Kotak Dialog Ucapan -->
+            <div class="dialog-box" id="dialogBox">
+                <div class="dialog-name">System Message</div>
+                <div class="dialog-text">
+                    <h1>HBD SALMA! 🎉</h1>
+                    <p>Ciee yang nambah tua! Selamat ulang tahun ya sal. Semoga makin sukses, sehat terus, rezeki lancar, dan panjang umur.</p>
+                    
+                    <div class="highlight-quote">
+                        <p>"Moga apa yang kamu kejar tahun ini pada dikabulin semua... dan janlup traktir 🥳"</p>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div id="gameSection">
-            <h2>Tantangan Traktiran! 🎯</h2>
-            <p>Pecahin <strong>10 balon/kado</strong> yang jatuh buat klaim tiket traktiran lu!</p>
-            
-            <div class="game-box">
-                <div class="score-board" id="scoreBoard">Skor: 0 / 10</div>
-                <div class="game-canvas" id="gameCanvas"></div>
-            </div>
         </div>
-
-        <div id="finalSection">
-            <div class="success-icon">🏆</div>
-            <h1 style="color: #b2ff59;">KELASSS BOSKU!</h1>
-            <p>Misi berhasil diselesaikan. Tunjukin *screenshot* halaman ini ke gue buat nagih traktirannya.</p>
-            <p class="wish" style="color: #ff4081; font-size: 1.5rem;">Sekali lagi, Happy Birthday Salma! 🥳</p>
-        </div>
-
     </div>
 
-    <script>
-        let score = 0;
-        const targetScore = 10;
-        let gameInterval;
-        const canvas = document.getElementById('gameCanvas');
-        const items = ['🎁', '🎈', '🎂', '🎉', '💸'];
-        const music = document.getElementById('bgMusic');
-
-        // Fungsi Tombol Awal Ditekan
-        function startSurprise() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('surpriseSection').style.display = 'block';
-
-            // Trik agar audio tidak diblokir browser HP
-            music.play().then(() => {
-                music.pause();
-                music.currentTime = 0;
-            }).catch(e => console.log(e));
-
-            // Bunyikan lagu TEPAT saat lilin menyala (delay 3.2 detik dari animasi CSS)
-            setTimeout(() => {
-                music.play();
-            }, 3200);
-
-            // Munculkan kartu ucapan setelah lilin menyala
-            setTimeout(() => {
-                document.getElementById('wishCard').classList.add('show-card');
-            }, 3800);
-        }
-
-        // Fungsi Transisi ke Minigame
-        function openGame() {
-            document.getElementById('surpriseSection').style.display = 'none';
-            document.getElementById('gameSection').style.display = 'block';
-            
-            // Mulai jatuhkan item
-            gameInterval = setInterval(createFallingItem, 500);
-        }
-
-        // Logika Minigame
-        function createFallingItem() {
-            if (score >= targetScore) {
-                clearInterval(gameInterval);
-                return;
-            }
-
-            const item = document.createElement('div');
-            item.className = 'falling-item';
-            item.innerText = items[Math.floor(Math.random() * items.length)];
-            
-            // Posisi X acak
-            const randomX = Math.random() * (canvas.clientWidth - 40);
-            item.style.left = randomX + 'px';
-            item.style.top = '-50px';
-            
-            canvas.appendChild(item);
-
-            let topPos = -50;
-            const speed = 3 + Math.random() * 3; // Kecepatan acak
-
-            function fall() {
-                if (score >= targetScore) {
-                    item.remove();
-                    return;
-                }
-                
-                topPos += speed;
-                item.style.top = topPos + 'px';
-
-                if (topPos < canvas.clientHeight) {
-                    requestAnimationFrame(fall);
-                } else {
-                    item.remove(); // Hapus kalau udah nyentuh bawah
-                }
-            }
-
-            // Kalau item berhasil di-klik
-            item.addEventListener('click', () => {
-                score++;
-                document.getElementById('scoreBoard').innerText = `Skor: ${score} / ${targetScore}`;
-                
-                item.style.transform = 'scale(1.5)';
-                setTimeout(() => item.remove(), 100);
-
-                if (score >= targetScore) {
-                    winGame();
-                }
-            });
-
-            requestAnimationFrame(fall);
-        }
-
-        // Fungsi Saat Game Selesai/Menang
-        function winGame() {
-            clearInterval(gameInterval);
-            document.getElementById('gameSection').style.display = 'none';
-            document.getElementById('finalSection').style.display = 'block';
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
