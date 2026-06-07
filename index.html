@@ -3,46 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kejutan Salma</title>
+    <title>HBD Salma</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <canvas id="particleCanvas"></canvas>
-
     <audio id="bgMusic" src="https://assets.mixkit.co/active_storage/sfx/123/123-200.wav" loop preload="auto"></audio>
 
     <div id="lockScreen">
         <div class="lock-box">
             <h2>HAYO MAU NGAPAIN? 👀</h2>
-            <p>Belum tanggal 27 Juni woy! Balik lagi nanti pas hari H ya.</p>
+            <p>Belum tanggal 27 Juni woy!</p>
             <div class="countdown" id="countdownTimer">Loading...</div>
             <button class="cheat-btn" onclick="unlockSurprise()">[Buka Paksa (Dev)]</button>
         </div>
     </div>
 
-    <div class="container">
-        <div id="mainSurprise">
-            
-            <div class="cake-container" id="cakeBox">
-                <div class="candle"><div class="flame"></div></div>
-                <div class="cake-layer layer-top"></div>
-                <div class="cake-layer layer-middle"></div>
-                <div class="cake-layer layer-bottom"></div>
-            </div>
+    <div class="main-wrapper" id="mainSurprise">
+        <div class="cake-container" id="cakeBox">
+            <div class="candle"><div class="flame"></div></div>
+            <div class="cake-layer layer-top"></div>
+            <div class="cake-layer layer-middle"></div>
+            <div class="cake-layer layer-bottom"></div>
+        </div>
 
-            <div class="dialog-box" id="dialogBox">
-                <div class="dialog-tag">Pesan Baru 💌</div>
-                <div class="dialog-content">
-                    <h1>HBD SALMA! 🎉</h1>
-                    <p>Ciee yang nambah tua! Selamat ulang tahun ya sal. Semoga makin sukses, sehat terus, rezeki lancar, dan panjang umur.</p>
-                    
-                    <div class="quote-box">
-                        <p>"Moga apa yang kamu kejar tahun ini pada dikabulin semua... dan janlup traktir 🥳"</p>
-                    </div>
+        <div class="dialog-box" id="dialogBox">
+            <div class="dialog-tag">Pesan Baru 💌</div>
+            <div class="dialog-content">
+                <h1>HBD SALMA! 🎉</h1>
+                <p>Ciee yang nambah tua! Selamat ulang tahun ya sal. Semoga makin sukses, sehat terus, rezeki lancar, dan panjang umur.</p>
+                <div class="quote-box">
+                    <p>"Moga apa yang kamu kejar tahun ini pada dikabulin semua... dan janlup traktir 🥳"</p>
                 </div>
             </div>
-
         </div>
     </div>
 

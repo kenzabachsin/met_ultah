@@ -1,235 +1,31 @@
-/* RESET & FONT */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+body { background: #1a0b2e; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
 
-body {
-    background: #1a0b2e; /* Ungu gelap estetik */
-    min-height: 100vh;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    /* Pengaman tambahan agar teks tidak pernah keluar layar */
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-}
+/* Canvas di paling belakang */
+#particleCanvas { position: fixed; top: 0; left: 0; z-index: 1; pointer-events: none; }
 
-#particleCanvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* --- TAMPILAN LOCK SCREEN --- */
-#lockScreen {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: #1a0b2e;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-}
-
-.lock-box {
-    background: #ffb7d2; /* Pink pastel */
-    color: #111;
-    border: 4px solid #111; /* Lineart tebal 2D */
-    padding: 30px;
-    border-radius: 15px;
+/* Container di depan canvas */
+.main-wrapper { 
+    display: none; 
+    position: relative; 
+    z-index: 2; 
+    width: 90%; 
+    max-width: 450px; 
     text-align: center;
-    /* Bayangan dirapatkan agar tidak terlihat lepas */
-    box-shadow: 4px 4px 0px #111; 
-    max-width: 400px;
-    width: 90%;
-    position: relative;
 }
 
-.lock-box h2 {
-    font-weight: 900;
-    margin-bottom: 10px;
-}
+#lockScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1a0b2e; display: flex; justify-content: center; align-items: center; z-index: 100; }
+.lock-box { background: #ffb7d2; padding: 30px; border-radius: 15px; border: 4px solid #111; box-shadow: 4px 4px 0px #111; text-align: center; }
 
-.countdown {
-    font-size: 1.8rem;
-    font-weight: 900;
-    background: #fff;
-    padding: 10px;
-    border: 3px solid #111;
-    border-radius: 8px;
-    margin: 20px 0;
-    display: block;
-    width: 100%;
-}
+.cake-container { position: relative; height: 220px; margin-bottom: 20px; }
+.cake-layer { position: absolute; left: 50%; transform: translateX(-50%); border: 4px solid #111; border-radius: 8px; }
+.layer-bottom { width: 180px; height: 60px; background: #6d4c41; bottom: 0; border-top: 12px solid #ff80ab; }
+.layer-middle { width: 140px; height: 50px; background: #f8bbd0; bottom: 56px; border-top: 10px solid #fff9c4; }
+.layer-top { width: 100px; height: 40px; background: #fff9c4; bottom: 102px; border-top: 8px solid #ff4081; }
 
-.cheat-btn {
-    background: transparent;
-    border: none;
-    color: #555;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 10px;
-}
+.candle { position: absolute; width: 14px; height: 40px; background: #00e5ff; border: 3px solid #111; bottom: 140px; left: 50%; transform: translateX(-50%); }
+.flame { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 16px; height: 24px; background: #ffeb3b; border: 3px solid #ff9800; border-radius: 50%; }
 
-/* --- KONTEN KEJUTAN --- */
-.container {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    max-width: 450px;
-    padding: 20px;
-}
-
-#mainSurprise {
-    display: none;
-    text-align: center;
-    width: 100%;
-}
-
-/* KUE 2D */
-.cake-container {
-    position: relative;
-    height: 220px;
-    width: 220px;
-    margin: 0 auto 30px auto;
-}
-
-.cake-layer {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 4px solid #111;
-    border-radius: 8px;
-}
-
-.layer-bottom {
-    width: 180px; height: 60px; background: #6d4c41; bottom: 0;
-    border-top: 12px solid #ff80ab;
-    animation: dropIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
-    opacity: 0;
-}
-
-.layer-middle {
-    width: 140px; height: 50px; background: #f8bbd0; bottom: 56px;
-    border-top: 10px solid #fff9c4;
-    animation: dropIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards 0.2s;
-    opacity: 0;
-}
-
-.layer-top {
-    width: 100px; height: 40px; background: #fff9c4; bottom: 102px;
-    border-top: 8px solid #ff4081;
-    animation: dropIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards 0.4s;
-    opacity: 0;
-}
-
-@keyframes dropIn {
-    0% { transform: translate(-50%, -50px); opacity: 0; }
-    100% { transform: translate(-50%, 0); opacity: 1; }
-}
-
-/* LILIN */
-.candle {
-    position: absolute; width: 14px; height: 40px;
-    background: #00e5ff; border: 3px solid #111;
-    bottom: 140px; left: 50%; transform: translateX(-50%);
-    opacity: 0;
-    animation: fadeIn 0.4s forwards 0.8s;
-}
-
-.flame {
-    position: absolute; top: -20px; left: 50%;
-    transform: translateX(-50%) scale(0);
-    width: 16px; height: 24px; background: #ffeb3b;
-    border: 3px solid #ff9800;
-    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
-    animation: ignite 0.4s forwards 1.2s, flicker 0.2s infinite alternate 1.6s;
-}
-
-@keyframes fadeIn { to { opacity: 1; } }
-@keyframes ignite { to { transform: translateX(-50%) scale(1); } }
-@keyframes flicker {
-    0% { transform: translateX(-50%) scale(1) skewX(2deg); }
-    100% { transform: translateX(-50%) scale(1.05) skewX(-2deg); }
-}
-
-/* KOTAK DIALOG (Flat Design) */
-.dialog-box {
-    background: #2a1b42;
-    border: 4px solid #b2ff59;
-    border-radius: 12px;
-    padding: 35px 20px 20px 20px; /* Padding atas dilebarkan agar tag tidak nabrak */
-    position: relative;
-    /* Bayangan dirapatkan ke 4px agar menyatu dengan kotak */
-    box-shadow: 4px 4px 0px rgba(178, 255, 89, 1);
-    opacity: 0;
-    transform: translateY(20px);
-    width: 100%;
-}
-
-.show-dialog {
-    animation: popUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards 2s;
-}
-
-@keyframes popUp {
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.dialog-tag {
-    position: absolute;
-    top: -16px; left: 20px;
-    background: #b2ff59;
-    color: #111;
-    border: 3px solid #111;
-    padding: 4px 15px;
-    font-weight: 900;
-    border-radius: 8px;
-    z-index: 2; /* Memastikan tag selalu di atas garis background */
-}
-
-.dialog-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.dialog-content h1 {
-    color: #ff4081;
-    font-size: 2rem; /* Ukuran disesuaikan agar tidak tumpah */
-    font-weight: 900;
-    margin-bottom: 15px;
-    text-shadow: 2px 2px 0px #111; /* Bayangan teks dirapatkan */
-}
-
-.dialog-content p {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #fff;
-    font-weight: 500;
-}
-
-/* Kotak Teks Highlight */
-.quote-box {
-    background: #111;
-    border: 3px solid #fff;
-    border-radius: 8px;
-    padding: 15px;
-    margin-top: 20px;
-    width: 100%; /* Memaksa kotak selalu ikut ukuran background utama */
-}
-
-.quote-box p {
-    color: #b2ff59 !important;
-    font-weight: 800;
-    font-style: italic;
-    font-size: 1.1rem !important;
-    margin: 0;
-}
+.dialog-box { background: #2a1b42; border: 4px solid #b2ff59; border-radius: 12px; padding: 25px; position: relative; box-shadow: 4px 4px 0px #b2ff59; }
+.dialog-tag { position: absolute; top: -16px; left: 20px; background: #b2ff59; padding: 4px 15px; font-weight: 900; border: 3px solid #111; border-radius: 8px; }
+.quote-box { background: #111; padding: 15px; margin-top: 15px; border-radius: 8px; color: #b2ff59; font-style: italic; }
