@@ -1,212 +1,276 @@
+/* --- RESET & ROOT STYLE --- */
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
     font-family: 'Courier New', Courier, monospace;
 }
 
 body {
-    background: #120720;
-    margin: 0;
-    padding: 0;
+    background: #06020b;
     min-height: 100vh;
     overflow: hidden;
-    color: #fff;
-    text-align: center;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Canvas untuk sistem partikel membentuk Love */
+/* Canvas Latar Belakang */
 #particleCanvas {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     z-index: 1;
     pointer-events: none;
 }
 
-/* --- LAYAR LOCK / COUNTDOWN --- */
+/* --- TAMPILAN LOCK SCREEN PREMIUM --- */
 #lockScreen {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, #0f071a 0%, #05020a 100%);
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: #120720;
     z-index: 100;
+    padding: 20px;
 }
-.warning-box {
-    border: 3px solid #ff4081;
-    background: rgba(255, 64, 129, 0.1);
-    padding: 30px;
-    box-shadow: 8px 8px 0px rgba(255, 64, 129, 0.4);
-    max-width: 420px;
-    width: 90%;
-    z-index: 101;
+
+.lock-card {
+    background: rgba(15, 8, 24, 0.7);
+    border: 2px solid #ff4081;
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 460px;
+    position: relative;
+    box-shadow: 0 0 30px rgba(255, 64, 129, 0.2), inset 0 0 15px rgba(255, 64, 129, 0.1);
+    overflow: hidden;
 }
-.blink-text {
+
+/* Efek Garis Laser Scanner Cyberpunk */
+.scanner-line {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 4px;
+    background: linear-gradient(90deg, transparent, #ff4081, transparent);
+    animation: scan 3s linear infinite;
+}
+@keyframes scan {
+    0% { top: 0%; }
+    50% { top: 100%; }
+    100% { top: 0%; }
+}
+
+.status-badge {
     color: #ff4081;
-    font-size: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 8px rgba(255, 64, 129, 0.6);
+}
+
+.lock-sub {
+    font-size: 0.95rem;
+    color: #a49cb0;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.highlight-text {
+    color: #b2ff59;
     font-weight: bold;
-    animation: blinker 1s linear infinite;
+}
+
+.timer-container {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 35px;
+}
+
+.timer-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #655d70;
+    letter-spacing: 1px;
     margin-bottom: 10px;
 }
-@keyframes blinker { 50% { opacity: 0; } }
 
 .countdown {
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: #b2ff59;
-    text-shadow: 2px 2px 0px #000;
-    margin: 20px 0;
     font-weight: bold;
+    text-shadow: 0 0 10px rgba(178, 255, 89, 0.4);
 }
 
-.cheat-btn {
+/* Tombol Bypass Estetik */
+.dev-bypass-btn {
     background: transparent;
-    color: #555;
-    border: 1px dashed #555;
-    padding: 5px 10px;
-    margin-top: 20px;
-    cursor: pointer;
+    border: 1px dashed #655d70;
+    color: #655d70;
+    padding: 10px 20px;
     font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
 }
-.cheat-btn:hover { color: #fff; border-color: #fff; }
+.dev-bypass-btn:hover {
+    border-color: #ffffff;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
 
-/* --- CONTAINER UTAMA SURPRISE --- */
-.container {
-    max-width: 500px;
-    margin: 0 auto;
+/* --- KONTEN UTAMA SELEPAS TERBUKA --- */
+.main-wrapper {
+    display: none;
+    width: 100%;
+    max-width: 480px;
     padding: 20px;
     position: relative;
     z-index: 10;
 }
-#mainSurprise {
-    display: none;
-    padding-top: 40px;
+
+/* Desain Kue Minimalis Modern */
+.cake-frame {
+    position: relative;
+    width: 200px;
+    height: 180px;
+    margin: 0 auto 35px auto;
 }
 
-/* Animasi Kue Flat 2D */
-.cake-container {
-    position: relative;
-    height: 230px;
-    margin: 0 auto 25px auto;
-    width: 250px;
-    filter: drop-shadow(8px 8px 0px rgba(0,0,0,0.4));
-}
-.cake-layer {
+.cake-body {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    border: 4px solid #2c1a4d;
+    border: 3.5px solid #06020b;
 }
-.layer-bottom {
-    width: 200px; height: 70px; background: #6d4c41; bottom: 0;
-    border-top: 15px solid #ff80ab;
-    box-shadow: inset -15px 0 0 rgba(0,0,0,0.2);
-    animation: dropLayer 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+
+.tier-bottom {
+    width: 180px; height: 55px; background: #503730; bottom: 0;
+    border-top: 12px solid #ff79a5;
+    box-shadow: inset -15px 0 0 rgba(0,0,0,0.15);
+    animation: cakeDrop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
     opacity: 0;
 }
-.layer-middle {
-    width: 150px; height: 60px; background: #f8bbd0; bottom: 65px;
-    border-top: 12px solid #fff9c4;
-    box-shadow: inset -15px 0 0 rgba(0,0,0,0.1);
-    animation: dropLayer 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.3s;
+
+.tier-middle {
+    width: 135px; height: 48px; background: #ffb7d2; bottom: 50px;
+    border-top: 10px solid #fff3a1;
+    box-shadow: inset -12px 0 0 rgba(0,0,0,0.1);
+    animation: cakeDrop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards 0.25s;
     opacity: 0;
 }
-.layer-top {
-    width: 100px; height: 50px; background: #fff9c4; bottom: 120px;
-    border-top: 10px solid #ff4081;
-    box-shadow: inset -10px 0 0 rgba(0,0,0,0.1);
-    animation: dropLayer 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.6s;
+
+.tier-top {
+    width: 90px; height: 40px; background: #fff3a1; bottom: 94px;
+    border-top: 8px solid #ff4081;
+    box-shadow: inset -8px 0 0 rgba(0,0,0,0.08);
+    animation: cakeDrop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards 0.5s;
     opacity: 0;
 }
-@keyframes dropLayer {
-    0% { transform: translate(-50%, -100px); opacity: 0; }
+
+@keyframes cakeDrop {
+    0% { transform: translate(-50%, -60px); opacity: 0; }
     100% { transform: translate(-50%, 0); opacity: 1; }
 }
 
-/* Lilin & Api */
-.candle {
-    position: absolute; width: 14px; height: 45px;
-    background: #00e5ff; border: 3px solid #2c1a4d;
-    bottom: 170px; left: 50%; transform: translateX(-50%);
+/* Lilin Estetik */
+.candle-stick {
+    position: absolute; width: 10px; height: 35px;
+    background: #00e5ff; border: 2.5px solid #06020b;
+    bottom: 132px; left: 50%; transform: translateX(-50%);
     opacity: 0;
-    animation: fadeIn 0.5s ease forwards 1.2s;
-}
-.flame {
-    position: absolute; top: -22px; left: 50%;
-    transform: translateX(-50%) scale(0);
-    width: 18px; height: 26px; background: #ffeb3b;
-    border: 2px solid #ff9800;
-    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
-    animation: ignite 0.5s ease forwards 1.8s, flicker 0.2s steps(2, end) infinite alternate 2.3s;
-}
-@keyframes fadeIn { to { opacity: 1; } }
-@keyframes ignite { to { transform: translateX(-50%) scale(1); } }
-@keyframes flicker {
-    0% { transform: translateX(-50%) scale(1) skewX(2deg); }
-    100% { transform: translateX(-50%) scale(1.05) skewX(-2deg); }
+    animation: fadeInElement 0.4s ease forwards 1s;
 }
 
-/* --- KOTAK DIALOG --- */
-.dialog-box {
-    background: #201235;
-    border: 4px solid #b2ff59;
-    padding: 25px;
-    box-shadow: 10px 10px 0px rgba(178, 255, 89, 0.3);
-    text-align: center;
+.candle-flame {
+    position: absolute; top: -18px; left: 50%;
+    transform: translateX(-50%) scale(0);
+    width: 12px; height: 20px; background: #ffee55;
+    border: 2px solid #ff9100;
+    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+    animation: igniteFlame 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.5) forwards 1.5s, flickerFlame 0.15s ease-in-out infinite alternate 2s;
+}
+
+@keyframes fadeInElement { to { opacity: 1; } }
+@keyframes igniteFlame { to { transform: translateX(-50%) scale(1); } }
+@keyframes flickerFlame {
+    0% { transform: translateX(-50%) scale(1) skewX(2deg); filter: drop-shadow(0 0 4px #ff9100); }
+    100% { transform: translateX(-50%) scale(1.08) skewX(-2deg); filter: drop-shadow(0 0 10px #ffee55); }
+}
+
+/* --- KOTAK DIALOG GLASSMORPHISM PREMIUM --- */
+.vn-dialog {
+    background: rgba(14, 8, 22, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid #b2ff59;
+    padding: 30px 24px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(178, 255, 89, 0.15);
     position: relative;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(25px);
+    text-align: center;
 }
-.show-dialog {
-    animation: popUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 2.5s;
+
+.vn-dialog.show-dialog {
+    animation: dialogPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards 2.2s;
 }
-@keyframes popUp {
+
+@keyframes dialogPop {
     to { opacity: 1; transform: translateY(0); }
 }
 
-.dialog-name {
+.vn-header {
     position: absolute;
-    top: -20px; left: -4px;
+    top: -16px; left: 16px;
     background: #b2ff59;
-    color: #000;
-    padding: 5px 15px;
-    font-weight: bold;
-    font-size: 1.1rem;
-    border: 4px solid #120720;
+    color: #06020b;
+    padding: 4px 14px;
+    font-size: 0.85rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    box-shadow: 4px 4px 0px rgba(178, 255, 89, 0.2);
 }
 
-.dialog-text p {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #fff;
-    font-weight: 500;
-}
-
-.dialog-text h1 {
+.neon-title {
     color: #ff4081;
-    font-size: 2.6rem;
-    margin-top: 10px;
-    margin-bottom: 20px;
+    font-size: 2.3rem;
     font-family: 'Segoe UI', sans-serif;
     font-weight: 900;
-    text-shadow: 3px 3px 0px #120720;
+    margin-bottom: 20px;
     letter-spacing: 1px;
+    text-shadow: 0 0 15px rgba(255, 64, 129, 0.3);
 }
 
-.highlight-quote {
-    background: rgba(0, 0, 0, 0.4);
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.message-paragraph {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #e2daeb;
+    font-weight: 400;
 }
-.highlight-quote p {
+
+/* Kotak Highlight Teks Hijau */
+.quote-card {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 18px;
+    margin-top: 25px;
+    border-left: 4px solid #b2ff59;
+    border-right: 1px solid rgba(255, 255, 255, 0.03);
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.quote-text {
     color: #b2ff59 !important;
+    font-family: 'Segoe UI', sans-serif;
     font-style: italic;
     font-weight: bold;
-    margin: 0;
-    font-size: 1.2rem !important;
+    font-size: 1.15rem !important;
+    line-height: 1.5;
 }

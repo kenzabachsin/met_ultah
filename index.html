@@ -8,49 +8,51 @@
 </head>
 <body>
 
-    <!-- Canvas untuk Efek Animasi Love Elektrik -->
     <canvas id="particleCanvas"></canvas>
 
-    <!-- Audio Efek/Musik -->
     <audio id="bgMusic" src="https://assets.mixkit.co/active_storage/sfx/123/123-200.wav" loop preload="auto"></audio>
 
-    <!-- 1. TAMPILAN LOCK SCREEN & COUNTDOWN -->
     <div id="lockScreen">
-        <div class="warning-box">
-            <div class="blink-text">⚠️ AKSES DITOLAK ⚠️</div>
-            <p style="font-size: 1rem; line-height: 1.4;">Target "Salma_Jamet" belum mencapai siklus penambahan usia resmi.</p>
-            <p>Waktu tersisa menuju 27 Juni:</p>
-            <div class="countdown" id="countdownTimer">Loading...</div>
-            <button class="cheat-btn" onclick="unlockSurprise()">[Dev Mode: Maksa Buka]</button>
+        <div class="lock-card">
+            <div class="scanner-line"></div>
+            <div class="status-badge">⚠️ SECURITY ACCESS DENIED</div>
+            <p class="lock-sub">Protokol enkripsi mendeteksi target <span class="highlight-text">"Salma_Jamet"</span> belum memenuhi syarat penambahan siklus usia.</p>
+            
+            <div class="timer-container">
+                <span class="timer-label">MENGHITUNG MUNDUR MENUJU 27 JUNI</span>
+                <div class="countdown" id="countdownTimer">00H : 00J : 00M : 00D</div>
+            </div>
+            
+            <button class="dev-bypass-btn" onclick="unlockSurprise()">
+                <span class="btn-glitch">[ BYPASS SYSTEM DEVELOPMENT ]</span>
+            </button>
         </div>
     </div>
 
-    <!-- 2. HALAMAN UTAMA SURPRISE -->
-    <div class="container">
-        <div id="mainSurprise">
-            
-            <!-- Elemen Kue 2D -->
-            <div class="cake-container" id="cakeBox">
-                <div class="candle"><div class="flame"></div></div>
-                <div class="cake-layer layer-top"></div>
-                <div class="cake-layer layer-middle"></div>
-                <div class="cake-layer layer-bottom"></div>
+    <div class="main-wrapper" id="mainSurprise">
+        
+        <div class="cake-frame" id="cakeBox">
+            <div class="candle-glow"></div>
+            <div class="candle-stick">
+                <div class="candle-flame"></div>
             </div>
+            <div class="cake-body tier-top"></div>
+            <div class="cake-body tier-middle"></div>
+            <div class="cake-body tier-bottom"></div>
+        </div>
 
-            <!-- Kotak Dialog Ucapan -->
-            <div class="dialog-box" id="dialogBox">
-                <div class="dialog-name">System Message</div>
-                <div class="dialog-text">
-                    <h1>HBD SALMA! 🎉</h1>
-                    <p>Ciee yang nambah tua! Selamat ulang tahun ya sal. Semoga makin sukses, sehat terus, rezeki lancar, dan panjang umur.</p>
-                    
-                    <div class="highlight-quote">
-                        <p>"Moga apa yang kamu kejar tahun ini pada dikabulin semua... dan janlup traktir 🥳"</p>
-                    </div>
+        <div class="vn-dialog" id="dialogBox">
+            <div class="vn-header">SYSTEM OVERRIDE: SUCCESS</div>
+            <div class="vn-body">
+                <h1 class="neon-title">HBD SALMA! 🎉</h1>
+                <p class="message-paragraph">Ciee yang nambah tua! Selamat ulang tahun ya sal. Semoga makin sukses, sehat terus, rezeki lancar, dan panjang umur.</p>
+                
+                <div class="quote-card shadow-inner">
+                    <p class="quote-text">"Moga apa yang kamu kejar tahun ini pada dikabulin semua... dan janlup traktir 🥳"</p>
                 </div>
             </div>
-
         </div>
+
     </div>
 
     <script src="script.js"></script>
