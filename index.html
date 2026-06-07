@@ -6,17 +6,15 @@
     <title>HBD Salma</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-
-    <canvas id="particleCanvas"></canvas>
+<body onload="initCanvas()"> <canvas id="particleCanvas"></canvas>
     <audio id="bgMusic" src="https://assets.mixkit.co/active_storage/sfx/123/123-200.wav" loop preload="auto"></audio>
 
     <div id="lockScreen">
         <div class="lock-box">
             <h2>HAYO MAU NGAPAIN? 👀</h2>
             <p>Belum tanggal 27 Juni woy!</p>
-            <div class="countdown" id="countdownTimer">Loading...</div>
-            <button class="cheat-btn" onclick="unlockSurprise()">[Buka Paksa (Dev)]</button>
+            <div class="countdown" id="countdownTimer">00:00:00:00</div>
+            <button class="cheat-btn" onclick="unlockSurprise()">[ Buka Paksa ]</button>
         </div>
     </div>
 
